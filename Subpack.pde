@@ -1,9 +1,9 @@
 public class Subpack{
   public static final float AMBIENTTEMP = 25.0;
   public int subpackNumber;
-  public float[] cellTemps = new float[15];//0-4 first subsubpack, 5-9 second subsubpack, 10-14 third subsubpack
-  public float[] boardTemps = new float[9];//0-2 first BMS Slave Board Temp, 3-5 second BMS Slave Board Temp, 6-8 third BMS Slave Board Temp
-  public float[] cellVoltages = new float[28];
+  public float[] cellTemps = new float[24];//0-4 first subsubpack, 5-9 second subsubpack, 10-14 third subsubpack
+  public float[] boardTemps = new float[7];//0-2 first BMS Slave Board Temp, 3-5 second BMS Slave Board Temp, 6-8 third BMS Slave Board Temp
+  public float[] cellVoltages = new float[24];
   
   float acceptableVoltageDifference = 0.014;
   float worryingVoltageDifference = 0.03;
@@ -61,8 +61,8 @@ public class Subpack{
     
     int index;
     int greenBlueValue = 255;
-    for(int i = 0; i < 3; i++){
-      for(int j = 0; j < 3; j++){
+    for(int j = 0; j < 7; j++){
+      int i = 0; 
         index = i * 3 + j;
         if(boardTemps[index] > AMBIENTTEMP){
           greenBlueValue = 255-(int)map(boardTemps[index], AMBIENTTEMP, 60, 150,255);
@@ -77,10 +77,10 @@ public class Subpack{
         rect(boardTempTextX - boardTempTextSize - boardTempTextSize/2, boardTempTextY - boardTempTextSize, boardTempTextSize, boardTempTextSize);
         
         textSize(boardTempTextSize);
-        if(index < 3){
+        if(index < 4){
           fill(CYAN);
         }
-        else if(index < 6){
+        else if(index < 7){
           fill(PURPLE);
         }
         else{
@@ -92,7 +92,7 @@ public class Subpack{
         catch(Exception e){
           System.out.println("Oh man it didn't like that float");
         }
-      }
+      
     }
     
     //
@@ -108,10 +108,10 @@ public class Subpack{
     for(int i = 0; i < cellVoltages.length; i++){
       int textX = (i < cellVoltages.length /2) ? (cellVoltageTextXPos): (10 + cellVoltageTextXPos + subpackWidth*8/100);
       int textY = yPos + cellVoltageTextSize * 2 + i%(cellVoltages.length/2) * cellVoltageTextSize + 15;
-      if(i < 9){
+      if(i < 12){
         fill(CYAN);
       }
-      else if(i < 18){
+      else if(i < 24){
         fill(PURPLE);
       }
       else{
@@ -144,6 +144,7 @@ public class Subpack{
     int cellTempTextSize = subpackHeight/(3*17);
     int cellTempTextX;
     int cellTempTextY;
+    int cellTempTextXPos = xPos + subpackWidth/3; 
     fill(255);
     text("Cell Temps", xPos + subpackWidth*37/100, yPos + cellTempTextSize);
     
@@ -155,15 +156,19 @@ public class Subpack{
       else{
         greenBlueValue = 255;
       }
-      cellTempTextY = yPos + cellTempTextSize * i + cellTempTextSize*5/2;
-      cellTempTextX = xPos + subpackWidth*37/100;
+      //cellTempTextY = yPos + cellTempTextSize * i + cellTempTextSize*5/2;
+      //cellTempTextX = xPos + subpackWidth*37/100;
+      
+      cellTempTextX = (i < cellTemps.length /2) ? (cellTempTextXPos): (10 + cellTempTextXPos + subpackWidth*8/100);
+      cellTempTextY = yPos + cellVoltageTextSize * 2 + i%(cellVoltages.length/2) * cellVoltageTextSize + 15;
+      
       fill(greenBlueValue == 255 ? color(0,255,0) : color(255, greenBlueValue, greenBlueValue));
       rect(cellTempTextX - cellTempTextSize - subpackWidth/200, cellTempTextY - cellTempTextSize, cellTempTextSize, cellTempTextSize);
       
-      if(i < 5){
+      if(i < 12){
         fill(CYAN);
       }
-      else if(i < 10){
+      else if(i < 24){
         fill(PURPLE);
       }
       else{
