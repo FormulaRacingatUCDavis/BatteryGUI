@@ -1,9 +1,9 @@
 public class Subpack{
   public static final float AMBIENTTEMP = 25.0;
   public int subpackNumber;
-  public float[] cellTemps = new float[24];//0-4 first subsubpack, 5-9 second subsubpack, 10-14 third subsubpack
-  public float[] boardTemps = new float[7];//0-2 first BMS Slave Board Temp, 3-5 second BMS Slave Board Temp, 6-8 third BMS Slave Board Temp
-  public float[] cellVoltages = new float[24];
+  public float[] cellTemps = new float[num_cell_temps];
+  public float[] boardTemps = new float[num_board_temps];
+  public float[] cellVoltages = new float[num_voltages];
   
   float acceptableVoltageDifference = 0.014;
   float worryingVoltageDifference = 0.03;
@@ -31,6 +31,7 @@ public class Subpack{
     this.cellVoltages = cellVoltages;
     this.subpackNumber = subpackNumber;
   }
+  
   public void drawSubpack(int xPos, int yPos, int subpackWindowWidth, int subpackWindowHeight){
     //
     //FRAME SETUP
