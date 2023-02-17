@@ -10,10 +10,13 @@ int num_cell_temps = 24;
 int num_board_temps = 7;
 int num_voltages = 24;
 
+Serial myPort;
+
 Subpack[] subpacks = new Subpack[num_subpacks];
 
 void setup() {
   //fullScreen();
+  //parse();
   size(1500,1000);
   frameRate(1);
   background(0);
@@ -23,11 +26,13 @@ void setup() {
     subpacks[i].drawSubpack(!(i>2) ? 0 : width/2, ((i%3) * (height/3-100)), width/2, height/3-100);
     
   }
+  myPort =  new Serial(this, Serial.list()[0], 115200);
 }
 
 
 void draw() {
   background(0);
+  //parse_buffer();
   for(int i = 0; i < subpacks.length; i++){
     //subpacks[i] = new Subpack();
     //subpacks[i].subpackNumber = i+1;
