@@ -11,7 +11,6 @@ int num_board_temps = 7;
 int num_voltages = 24;
 
 Serial myPort;
-
 Subpack[] subpacks = new Subpack[num_subpacks];
 
 void setup() {
