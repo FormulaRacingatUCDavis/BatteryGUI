@@ -5,10 +5,10 @@
 import java.util.Arrays;
 import processing.serial.*;
 
-int num_subpacks = 5;
-int num_cell_temps = 24;
-int num_board_temps = 7;
-int num_voltages = 24;
+int num_subpacks = 1;
+int num_cell_temps = 12;
+int num_board_temps = 0;
+int num_voltages = 12;
 
 Serial myPort;
 Subpack[] subpacks = new Subpack[num_subpacks];

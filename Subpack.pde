@@ -39,9 +39,8 @@ public class Subpack{
     //
     //FRAME SETUP
     //
-    int boardTempXPos = xPos;
-    int voltageXPos = xPos + subpackWindowWidth*25/100;
-    int cellTempXPos = xPos + subpackWindowWidth*65/100;
+    int voltageXPos = xPos;
+    int cellTempXPos = xPos + subpackWindowWidth/2;
     
     int subpackWidth = subpackWindowWidth * 2;
     int subpackHeight = subpackWindowHeight * 3;
@@ -64,34 +63,7 @@ public class Subpack{
     int textY;
     fill(255);
     textSize(textSize);
-    
-    text("Board Temps", xPos + subpackWidth/200, yPos + textSize);
-    
-    int gb = 255;
-    for(int j = 0; j < num_board_temps; j++){
-        gb = 255;
-        if(boardTemps[j] > AMBIENTTEMP){
-          gb = 255-(int)map(boardTemps[j], AMBIENTTEMP, 60, 150,255);
-        }
-          
-        textY = yPos + j*textSize + padding;
-        textX = boardTempXPos + padding;
-        
-        fill(gb == 255 ? color(0,255,0) : color(255, gb, gb));   //set fill color for color sqare
-        rect(textX - 20, textY - textSize, textSize, textSize); //draw color square
-        
-        if(j < 4) fill(CYAN);
-        else if(j < 7)  fill(PURPLE);
-        else fill(ORANGE);
-        
-        try{
-          text("Board Temp " + str(j) + ": " + str(boardTemps[j]), textX, textY);
-        }
-        catch(Exception e){
-          System.out.println("Oh man it didn't like that float");
-        }
-      
-    }
+    int gb;
     
     //
     //CELL VOLTAGES
