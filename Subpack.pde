@@ -5,15 +5,15 @@ public class Subpack{
   public int[] boardTemps = new int[num_board_temps];
   public float[] cellVoltages = new float[num_voltages];
   
-  float acceptableVoltageDifference = 0.05;
-  float worryingVoltageDifference = 0.08;
+  final float acceptableVoltageDifference = 0.05;
+  final float worryingVoltageDifference = 0.08;
   
   final color CYAN = color(#00FFFF);
   final color PURPLE = color(#FFA0FF);
   final color ORANGE = color(#FFE090);
   
-  int textSize = 14;
-  int padding = 40;
+  final int textSize = 14;
+  final int padding = 40;
   
   public Subpack(){
     //for testing
@@ -85,7 +85,7 @@ public class Subpack{
       else fill(ORANGE);
 
       try{
-        text("Cell " + (i+1) + ": " + (i < 9 ? "  " : "") + str(cellVoltages[i]), textX, textY);
+        text("Cell " + (i+1) + ": " + (i < 9 ? "  " : "") + nf(cellVoltages[i], 1, 4), textX, textY);
       }
       catch(Exception e){
         System.out.println("Oh man it didn't like that float");

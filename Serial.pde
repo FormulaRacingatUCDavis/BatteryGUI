@@ -61,8 +61,27 @@ void parse_buffer(){
       k++;
     }
     
+    batpack.pack_voltage = float((256*buffer[k]+buffer[k+1])/100);
+    k+=2;
+    
+    batpack.min_cell_voltage = float((256*buffer[k])+buffer[k+1])/10000;
+    k+=2;
+    
+    batpack.max_cell_voltage = float((256*buffer[k])+buffer[k+1])/10000;
+    k+=2;
+    
+    batpack.max_temp = buffer[k];
+    k++; 
+    
+    batpack.SOC = buffer[k]; 
+    k++;
+    
+    batpack.status = (256*buffer[k])+buffer[k+1];
+    k+=2;    
   }
 }
+
+
    
    
       
