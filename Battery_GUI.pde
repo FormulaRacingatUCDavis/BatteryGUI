@@ -35,10 +35,9 @@ void setup() {
     subpacks[i] = new Subpack();
     subpacks[i].subpackNumber = i+1;
   }
-  
-  
-  
-  //myPort =  new Serial(this, Serial.list()[0], 115200);
+
+  myPort =  new Serial(this, "COM9", 115200);
+
 }
 
 

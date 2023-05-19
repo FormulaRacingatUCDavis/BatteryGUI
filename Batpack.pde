@@ -57,7 +57,7 @@ public class Batpack{
   void draw_batpack(int xpos, int ypos){
     text_x = xpos + padding;
     text_y = ypos + padding;
-    float balance = (max_cell_voltage - min_cell_voltage)/1000.0;
+    float balance = (max_cell_voltage - min_cell_voltage)*1000.0;
     String str;
     
     fill(255);
