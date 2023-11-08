@@ -23,6 +23,8 @@ public class Batpack{
   public float min_cell_voltage = 0;
   public float max_cell_voltage = 0;
   public int max_temp = 0;
+  public int min_temp = 0;
+  public int avg_temp = 0;
   public int status = 0;
   public int SOC = 0;
   
@@ -66,6 +68,12 @@ public class Batpack{
     print_text(str);
     
     str = String.format("HI Temp: %dC", max_temp);
+    print_text(str);
+    
+    str = String.format("LO Temp: %dC", min_temp);
+    print_text(str);
+    
+    str = String.format("AVG Temp: %dC", avg_temp);
     print_text(str);
     
     str = String.format("Pack voltage: %.2fV", pack_voltage);

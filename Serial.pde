@@ -11,7 +11,7 @@ int subpack_num = 0;
 final int expected_len_subpack = (num_cell_temps + num_board_temps + 2*num_voltages);
 //                                1byte/celltemp   1byte/boardtemp   2 bytes/cell voltage
 
-final int expected_len_batpack = 10;
+final int expected_len_batpack = 12;
 
 void byte_in(int b_in){
   if(b_in < 0 || b_in > 255){
@@ -96,6 +96,12 @@ void parse_buffer_batpack(){
   k+=2;
   
   batpack.max_temp = buffer[k];
+  k++; 
+  
+  batpack.min_temp = buffer[k];
+  k++; 
+  
+  batpack.avg_temp = buffer[k];
   k++; 
   
   batpack.SOC = buffer[k]; 

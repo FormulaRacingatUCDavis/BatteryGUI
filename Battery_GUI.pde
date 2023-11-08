@@ -33,10 +33,10 @@ void setup() {
   
   for(int i = 0; i < subpacks.length; i++){
     subpacks[i] = new Subpack();
-    subpacks[i].subpackNumber = i+1;
+    subpacks[i].subpackNumber = i;
   }
 
-  myPort =  new Serial(this, "COM9", 115200);
+  myPort =  new Serial(this, "COM17", 115200);
 
 }
 
