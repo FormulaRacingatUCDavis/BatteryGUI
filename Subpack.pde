@@ -1,5 +1,5 @@
 public class Subpack{
-  public static final float AMBIENTTEMP = 25.0;
+  public static final float AMBIENTTEMP = 60.0;
   public int subpackNumber;
   public int[] cellTemps = new int[num_cell_temps];
   public int[] boardTemps = new int[num_board_temps];
