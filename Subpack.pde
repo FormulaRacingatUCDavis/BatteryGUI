@@ -5,8 +5,8 @@ public class Subpack{
   public int[] boardTemps = new int[num_board_temps];
   public float[] cellVoltages = new float[num_voltages];
   
-  final float acceptableVoltageDifference = 0.001;
-  final float worryingVoltageDifference = 0.05;
+  final float acceptableVoltageDifference = 0.02;
+  final float worryingVoltageDifference = 0.2;
   
   final color CYAN = color(#00FFFF);
   final color PURPLE = color(#FFA0FF);
