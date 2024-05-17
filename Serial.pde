@@ -1,10 +1,11 @@
 int ESCAPE_CHAR = 0xAA;
 int PACK_FRAME_START= 0xBB;
 int FRAME_END = 0x0A;
+int BUF_LEN = 600;
 
 boolean escaped = false;        //true if last character was escape
 boolean reading_batpack = false;
-int[] buffer = new int[600];  //store incoming bytes
+int[] buffer = new int[BUF_LEN];  //store incoming bytes
 int i = 0; 
 int subpack_num = 0;
 
@@ -14,6 +15,12 @@ final int expected_len_subpack = (num_cell_temps + num_board_temps + 2*num_volta
 final int expected_len_batpack = 12;
 
 void byte_in(int b_in){
+  
+  if(i >= (BUF_LEN - 1)){
+    println("OVERFLOW!!!");
+    return;
+  }
+  
   if(b_in < 0 || b_in > 255){
     return;
   }
