@@ -1,5 +1,5 @@
  /*
-
+man i love formula
 */
 
 import java.util.Arrays;
@@ -16,7 +16,9 @@ int subpack_width;
 int subpack_height;
 int batpack_width = 200;
 
-boolean connected = true;
+boolean connected = false;
+int loops_since_message = 0;
+final int TIMEOUT_LOOPS = 100;
 Serial myPort;
 String[] ports = Serial.list();
 Button[] buttons = new Button[10];
@@ -27,7 +29,7 @@ Batpack batpack = new Batpack();
 void setup() {
   //fullScreen();
   //parse();
-  size(1400,800);
+  size(1100,800);
   
   subpack_width = (width-batpack_width)/columns;
   subpack_height = height/rows;
@@ -61,6 +63,17 @@ void draw() {
   }  
   
   batpack.draw_batpack(columns*subpack_width, 0);
+  
+  // check for timeout
+  loops_since_message++;
+  if(loops_since_message > TIMEOUT_LOOPS){
+    if(myPort != null){
+      myPort.clear();
+      myPort.stop();
+    }
+    loops_since_message = 0;
+    connected = false;
+  }
 }
 
 void update_ports(){
@@ -75,21 +88,25 @@ void draw_port_select(){
   for(int i = 0; i < ports.length; i++){
     buttons[i].draw_button();
   }
-  TextyBoxy t = new TextyBoxy("Cell Temp", "C", 10, 20);
-  t.drawit(200, 200, 3, 15);
 }
   
 void mousePressed(){
   for(int i = 0; i < ports.length; i++){
     if(buttons[i].mouse_over()){
-      myPort =  new Serial(this, ports[i], 115200);
-      connected = true;
+      try {
+        myPort = new Serial(this, ports[i], 115200);
+        connected = true;
+      } catch (Exception e){
+        connected = false;
+      }
+    
       return;
     }
   }
 }
 
 void serialEvent (Serial myPort) {
+  loops_since_message = 0;
   int b = myPort.read();
   println(b);
   byte_in(b);

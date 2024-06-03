@@ -63,6 +63,7 @@ public class Batpack{
     String str;
     
     fill(255);
+    textSize(14);
     
     str = String.format("SOC: %d%%", SOC);
     print_text(str);

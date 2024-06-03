@@ -14,21 +14,22 @@ public class Subpack{
   final color PURPLE = color(#FFA0FF);
   final color ORANGE = color(#FFE090);
   
-  final int subpack_title_pos = 10;
-  final int vt_title_pos = 30;
+  final int subpack_title_pos = 22;
+  final int vt_title_pos = 38;
+  final int values_pos = 40;
   final int textSize = 14;
   final int left_padding = 20;
   
-  TextyBoxy tb_voltage = new TextyBoxy("Cell V", "V", 0, 0);
-  TextyBoxy tb_temp = new TextyBoxy("Cell T", "C", 40, 50);
+  TextyBoxy tb_voltage = new TextyBoxy("V", "V", 0, 0);
+  TextyBoxy tb_temp = new TextyBoxy("T", "C", 40, 50);
   
   public Subpack(){
     //for testing
     for(int i = 0; i < cellTemps.length; i++){
-     cellTemps[i] = int(random(AMBIENTTEMP-10, 30)); 
+     cellTemps[i] = int(random(20, 30)); 
     }
     for(int i = 0; i < boardTemps.length; i++){
-     boardTemps[i] = int(random(AMBIENTTEMP - 10,30)); 
+     boardTemps[i] = int(random(20,30)); 
     }
     for(int i = 0; i < cellVoltages.length; i++){
      cellVoltages[i] = random(3,3.08); 
@@ -43,34 +44,39 @@ public class Subpack{
   }
   
   public void drawSubpack(int xPos, int yPos, int subpackWindowWidth, int subpackWindowHeight, float min_cell_voltage){
-    int text_x = xPos + padding;
-    int text_y = yPos + padding;
+    fill(0);
+    stroke(255);
+    rect(xPos, yPos, subpackWindowWidth-1, subpackWindowHeight-1);
+    stroke(0);
+    fill(255);
     
-    
-    
+    draw_title(xPos, yPos);
+
     tb_voltage.green_yellow_cutoff = min_cell_voltage + acceptableVoltageDifference;
     tb_voltage.yellow_red_cutoff = min_cell_voltage + worryingVoltageDifference;
     
-    textSize(16);
-    text_y = yPos + 2*padding;
-    text("Cell Voltages", text_x, text_y);
-   
+    int text_x = xPos + padding;
+
+    fill(255);
+    textSize(14);
+    textAlign(LEFT, BOTTOM);
+    text("Cell Voltages", text_x, yPos + vt_title_pos);
+    
     for(int i = 0; i < num_voltages; i++){
-      int boxy_y = text_y + (tb_voltage.size)*(i % (num_voltages / 2));
+      int boxy_y = yPos + values_pos + (tb_voltage.size)*(i % (num_voltages / 2));
       int boxy_x = text_x + (subpackWindowWidth/4)*(i / (num_voltages / 2));
       tb_voltage.drawit(boxy_x, boxy_y, i, this.cellVoltages[i]);  
     }
     
-    fill(255);
-    textSize(16);
-    textAlign(LEFT, BOTTOM);
-    
-    text_y = yPos + 2*padding;
     text_x += subpackWindowWidth / 2;
-    text("Cell Temps", text_x, text_y);
+    
+    fill(255);
+    textSize(14);
+    textAlign(LEFT, BOTTOM);
+    text("Cell Temps", text_x, yPos + vt_title_pos);
     
     for(int i = 0; i < num_cell_temps; i++){
-      int boxy_y = text_y + (tb_voltage.size)*(i % (num_voltages / 2));
+      int boxy_y = yPos + values_pos + (tb_voltage.size)*(i % (num_voltages / 2));
       int boxy_x = text_x + (subpackWindowWidth/4)*(i / (num_voltages / 2));
       tb_temp.drawit(boxy_x, boxy_y, i, this.cellTemps[i]);   
     }
@@ -78,13 +84,9 @@ public class Subpack{
   
   private void draw_title(int xPos, int yPos){
     fill(255);
-    textSize(20);
+    textSize(18);
     textAlign(LEFT, BOTTOM);
     text("Subpack " + this.subpackNumber, xPos + left_padding, yPos + subpack_title_pos);
-    
-    
-    
-    
   }
 }
 
@@ -96,7 +98,7 @@ public class TextyBoxy{
   
   final public int size = 16;
   final int box_size = size - 2;
-  final int text_size = 11;
+  final int text_size = 14;
   final int text_offset = 10;
   
   public TextyBoxy(String declaration, String units, float green_yellow_cutoff, float yellow_red_cutoff){
@@ -113,12 +115,12 @@ public class TextyBoxy{
   
   public void drawit(int x, int y, int index, float value){
     draw_box(x, y, value);
-    drawit_str(x, y, index, str(value)); 
+    drawit_str(x, y, index, nf(value, 0, 4)); 
   }
   
   private void drawit_str(int x, int y, int index, String value){
     fill(color(#00FFFF));
-    String s = this.declaration + " " + index + ": " + value + this.units;
+    String s = this.declaration + index + ": " + value + this.units;
     textAlign(LEFT, CENTER);
     textSize(this.text_size);
     text(s, (x + this.box_size + this.text_offset), (y + (this.box_size / 2)));
