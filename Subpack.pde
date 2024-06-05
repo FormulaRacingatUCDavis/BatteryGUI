@@ -1,27 +1,35 @@
 public class Subpack{
-  public static final float AMBIENTTEMP = 25.0;
   public int subpackNumber;
+  int xPos;
+  int yPos; 
+  
   public int[] cellTemps = new int[num_cell_temps];
   public int[] boardTemps = new int[num_board_temps];
   public float[] cellVoltages = new float[num_voltages];
   
-  float acceptableVoltageDifference = 0.05;
-  float worryingVoltageDifference = 0.08;
+  final float acceptableVoltageDifference = 0.02;
+  final float worryingVoltageDifference = 0.2;
   
   final color CYAN = color(#00FFFF);
   final color PURPLE = color(#FFA0FF);
   final color ORANGE = color(#FFE090);
   
-  int textSize = 14;
-  int padding = 40;
+  final int subpack_title_pos = 22;
+  final int vt_title_pos = 38;
+  final int values_pos = 40;
+  final int textSize = 14;
+  final int left_padding = 20;
+  
+  TextyBoxy tb_voltage = new TextyBoxy("V", "V", 0, 0);
+  TextyBoxy tb_temp = new TextyBoxy("T", "C", 40, 50);
   
   public Subpack(){
     //for testing
     for(int i = 0; i < cellTemps.length; i++){
-     cellTemps[i] = int(random(AMBIENTTEMP-10, 30)); 
+     cellTemps[i] = int(random(20, 30)); 
     }
     for(int i = 0; i < boardTemps.length; i++){
-     boardTemps[i] = int(random(AMBIENTTEMP - 10,30)); 
+     boardTemps[i] = int(random(20,30)); 
     }
     for(int i = 0; i < cellVoltages.length; i++){
      cellVoltages[i] = random(3,3.08); 
@@ -35,136 +43,109 @@ public class Subpack{
     this.subpackNumber = subpackNumber;
   }
   
-  public void drawSubpack(int xPos, int yPos, int subpackWindowWidth, int subpackWindowHeight){
-    //
-    //FRAME SETUP
-    //
-    int boardTempXPos = xPos;
-    int voltageXPos = xPos + subpackWindowWidth*25/100;
-    int cellTempXPos = xPos + subpackWindowWidth*65/100;
-    
-    int subpackWidth = subpackWindowWidth * 2;
-    int subpackHeight = subpackWindowHeight * 3;
-    stroke(255);
+  public void drawSubpack(int xPos, int yPos, int subpackWindowWidth, int subpackWindowHeight, float min_cell_voltage){
     fill(0);
-    strokeWeight(4);
-    rect(xPos, yPos, subpackWidth/2, subpackHeight/3);
-    strokeWeight(1);
-    line(voltageXPos, yPos, voltageXPos, yPos + subpackWindowHeight);
-    line(cellTempXPos, yPos, cellTempXPos, yPos + subpackWindowHeight);
+    stroke(255);
+    rect(xPos, yPos, subpackWindowWidth-1, subpackWindowHeight-1);
+    stroke(0);
     fill(255);
-    textSize(subpackHeight/(3*17));
-    text("Subpack " + subpackNumber, xPos + subpackWindowWidth * 90/100, yPos + subpackHeight/(3*17));
     
-    //
-    //BOARD TEMPERATURES
-    //
+    draw_title(xPos, yPos);
+
+    tb_voltage.green_yellow_cutoff = min_cell_voltage + acceptableVoltageDifference;
+    tb_voltage.yellow_red_cutoff = min_cell_voltage + worryingVoltageDifference;
     
-    int textX;
-    int textY;
+    int text_x = xPos + padding;
+
     fill(255);
-    textSize(textSize);
+    textSize(14);
+    textAlign(LEFT, BOTTOM);
+    text("Cell Voltages", text_x, yPos + vt_title_pos);
     
-    text("Board Temps", xPos + subpackWidth/200, yPos + textSize);
-    
-    int gb = 255;
-    for(int j = 0; j < num_board_temps; j++){
-        gb = 255;
-        if(boardTemps[j] > AMBIENTTEMP){
-          gb = 255-(int)map(boardTemps[j], AMBIENTTEMP, 60, 150,255);
-        }
-          
-        textY = yPos + j*textSize + padding;
-        textX = boardTempXPos + padding;
-        
-        fill(gb == 255 ? color(0,255,0) : color(255, gb, gb));   //set fill color for color sqare
-        rect(textX - 20, textY - textSize, textSize, textSize); //draw color square
-        
-        if(j < 4) fill(CYAN);
-        else if(j < 7)  fill(PURPLE);
-        else fill(ORANGE);
-        
-        try{
-          text("Board Temp " + str(j) + ": " + str(boardTemps[j]), textX, textY);
-        }
-        catch(Exception e){
-          System.out.println("Oh man it didn't like that float");
-        }
-      
+    for(int i = 0; i < num_voltages; i++){
+      int boxy_y = yPos + values_pos + (tb_voltage.size)*(i % (num_voltages / 2));
+      int boxy_x = text_x + (subpackWindowWidth/4)*(i / (num_voltages / 2));
+      tb_voltage.drawit(boxy_x, boxy_y, i, this.cellVoltages[i]);  
     }
     
-    //
-    //CELL VOLTAGES
-    //
-
-    int cellVoltageTextXPos = voltageXPos + padding;
+    text_x += subpackWindowWidth / 2;
     
     fill(255);
-    text("Cell Voltages",cellVoltageTextXPos, yPos + textSize);
-    line(xPos, yPos + textSize + 2, xPos + subpackWidth/2, yPos + textSize + 2);
+    textSize(14);
+    textAlign(LEFT, BOTTOM);
+    text("Cell Temps", text_x, yPos + vt_title_pos);
     
-    for(int i = 0; i < cellVoltages.length; i++){
-      
-      textX = (i < cellVoltages.length /2) ? (cellVoltageTextXPos): (cellVoltageTextXPos + 120);
-      textY = yPos + i%(cellVoltages.length/2)*textSize + padding;
-      
-      if(i < 12) fill(CYAN);
-      else if(i < 24) fill(PURPLE);
-      else fill(ORANGE);
-
-      try{
-        text("Cell " + (i+1) + ": " + (i < 9 ? "  " : "") + str(cellVoltages[i]), textX, textY);
-      }
-      catch(Exception e){
-        System.out.println("Oh man it didn't like that float");
-      }
-      
-      //draw boxes
-      if(cellVoltages[i] - Stats.min(cellVoltages) > worryingVoltageDifference){
-        fill(255,0,0);
-      }
-      else if(cellVoltages[i] - Stats.min(cellVoltages) > acceptableVoltageDifference){
-        fill(255,255,0);
-      }
-      else{
-        fill(0,255,0);
-      }
-      rect(textX - 20, textY - textSize, textSize, textSize);
+    for(int i = 0; i < num_cell_temps; i++){
+      int boxy_y = yPos + values_pos + (tb_voltage.size)*(i % (num_voltages / 2));
+      int boxy_x = text_x + (subpackWindowWidth/4)*(i / (num_voltages / 2));
+      tb_temp.drawit(boxy_x, boxy_y, i, this.cellTemps[i]);   
     }
-    
-    //
-    //CELL TEMPERATURES
-    //
-    
-    int textXPos = cellTempXPos + padding; 
+  }
+  
+  private void draw_title(int xPos, int yPos){
     fill(255);
-    text("Cell Temps", xPos + subpackWidth*37/100, yPos + textSize);
+    textSize(18);
+    textAlign(LEFT, BOTTOM);
+    text("Subpack " + this.subpackNumber, xPos + left_padding, yPos + subpack_title_pos);
+  }
+}
+
+public class TextyBoxy{
+  private String declaration;
+  private String units;
+  public float green_yellow_cutoff;
+  public float yellow_red_cutoff;
+  
+  final public int size = 16;
+  final int box_size = size - 2;
+  final int text_size = 14;
+  final int text_offset = 10;
+  
+  public TextyBoxy(String declaration, String units, float green_yellow_cutoff, float yellow_red_cutoff){
+    this.declaration = declaration;
+    this.units = units;
+    this.green_yellow_cutoff = green_yellow_cutoff;
+    this.yellow_red_cutoff = yellow_red_cutoff;
+  }
+  
+  public void drawit(int x, int y, int index, int value){
+    draw_box(x, y, (float)value);
+    drawit_str(x, y, index, str(value)); 
+  }
+  
+  public void drawit(int x, int y, int index, float value){
+    draw_box(x, y, value);
+    drawit_str(x, y, index, nf(value, 0, 4)); 
+  }
+  
+  private void drawit_str(int x, int y, int index, String value){
+    fill(color(#00FFFF));
+    String s = this.declaration + index + ": " + value + this.units;
+    textAlign(LEFT, CENTER);
+    textSize(this.text_size);
+    text(s, (x + this.box_size + this.text_offset), (y + (this.box_size / 2)));
+  }
+  
+  public void draw_box(int x, int y, float value){
+    color c = get_color(value);
+    fill(c);
+    rect(x, y, this.box_size, this.box_size);
+  }
+  
+  public color get_color(float value){
     
-    for(int i = 0; i < cellTemps.length; i++){
-      
-      if(cellTemps[i] > AMBIENTTEMP){
-        gb = 255-(int)map(cellTemps[i], AMBIENTTEMP, 60, 150, 255);
-      }
-      else{
-        gb = 255;
-      }
-      
-      textX = (i < cellTemps.length /2) ? (textXPos): (textXPos + 120);
-      textY = yPos + i%(num_cell_temps/2)*textSize + padding;
-      
-      fill(gb == 255 ? color(0,255,0) : color(255, gb, gb));
-      rect(textX - 20, textY - textSize, textSize, textSize);
-      
-      if(i < 12) fill(CYAN);
-      else if(i < 24) fill(PURPLE);
-      else fill(ORANGE);
-      
-      try{
-        text("Cell Temp " + i + ": " + str(cellTemps[i]), textX, textY);
-      }
-      catch(Exception e){
-        System.out.println("Oh man it didn't like that float");
-      }
+    color red = color(255, 0, 0);
+    color yellow = color(255, 255, 0);
+    color green = color(0, 255, 0);
+    
+    if(yellow_red_cutoff > green_yellow_cutoff){
+      if(value > yellow_red_cutoff) return red;
+      if(value > green_yellow_cutoff) return yellow;
+      return green;
+    } else {
+      if(value < yellow_red_cutoff) return red;
+      if(value < green_yellow_cutoff) return yellow;
+      return green;
     }
   }
 }
