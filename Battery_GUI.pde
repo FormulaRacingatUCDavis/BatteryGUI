@@ -18,7 +18,7 @@ int batpack_width = 200;
 
 boolean connected = false;
 int loops_since_message = 0;
-final int TIMEOUT_LOOPS = 100;
+final int TIMEOUT_LOOPS = 50;
 Serial myPort;
 String[] ports = Serial.list();
 Button[] buttons = new Button[10];
@@ -41,10 +41,6 @@ void setup() {
     subpacks[i] = new Subpack();
     subpacks[i].subpackNumber = i;
   }
-  
-  update_ports();
-    //
-
 }
 
 
@@ -76,16 +72,12 @@ void draw() {
   }
 }
 
-void update_ports(){
-  for(int i = 0; i < ports.length; i++){
-    int x = 20*i;
-    buttons[i] = new Button(x, 0, 100, 50, ports[i], 255, 200, 0, 30);
-  }
-}
-
 void draw_port_select(){
   background(0);
+  ports = Serial.list();
   for(int i = 0; i < ports.length; i++){
+    int y = 50*i;
+    buttons[i] = new Button(0, y, 100, 50, ports[i], 255, 200, 0, 30);
     buttons[i].draw_button();
   }
 }
