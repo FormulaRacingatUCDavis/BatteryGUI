@@ -17,11 +17,17 @@ int subpack_height;
 int batpack_width = 200;
 
 boolean connected = false;
+boolean outletVoltageSet = false;
+int outletVoltageSetting;
 int loops_since_message = 0;
 final int TIMEOUT_LOOPS = 50;
 Serial myPort;
 String[] ports = Serial.list();
-Button[] buttons = new Button[10];
+Button[] portButtons = new Button[10];
+Button[] powerOutletButtons = {
+  new Button(0, 0, 100, 50, "120", 255, 200, 0, 30),
+  new Button(0, 50, 100, 50, "208", 255, 200, 0, 30)
+};
 
 Subpack[] subpacks = new Subpack[num_subpacks];
 Batpack batpack = new Batpack(); 
@@ -48,6 +54,14 @@ void draw() {
   if(!connected){
     draw_port_select();
     return;
+  }
+  
+  if (!outletVoltageSet) {
+    draw_outlet_select();
+    return;
+  }
+  else {
+    myPort.write(outletVoltageSetting);
   }
   
   background(0);
@@ -77,22 +91,48 @@ void draw_port_select(){
   ports = Serial.list();
   for(int i = 0; i < ports.length; i++){
     int y = 50*i;
-    buttons[i] = new Button(0, y, 100, 50, ports[i], 255, 200, 0, 30);
-    buttons[i].draw_button();
+    portButtons[i] = new Button(0, y, 100, 50, ports[i], 255, 200, 0, 30);
+    portButtons[i].draw_button();
+  }
+}
+
+void draw_outlet_select() {
+  background(0);
+  for (int i = 0; i < powerOutletButtons.length; i++) {
+    powerOutletButtons[i].draw_button();
   }
 }
   
 void mousePressed(){
-  for(int i = 0; i < ports.length; i++){
-    if(buttons[i].mouse_over()){
-      try {
-        myPort = new Serial(this, ports[i], 115200);
-        connected = true;
-      } catch (Exception e){
-        connected = false;
+  if (!connected) {
+    for(int i = 0; i < ports.length; i++){
+      if(portButtons[i].mouse_over()){
+        try {
+          myPort = new Serial(this, ports[i], 115200);
+          connected = true;
+        } catch (Exception e){
+          connected = false;
+        }
+      
+        return;
       }
-    
-      return;
+    }
+  }
+  
+  if (!outletVoltageSet) {
+    for (int i = 0; i < powerOutletButtons.length; i++) {
+      if (powerOutletButtons[i].mouse_over()) {
+        switch (i) {
+          case 0:
+            outletVoltageSetting = 120;
+            break;
+          case 1:
+            outletVoltageSetting = 208;
+            break;
+        }
+        
+        outletVoltageSet = true;
+      }
     }
   }
 }
