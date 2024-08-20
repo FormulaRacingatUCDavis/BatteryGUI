@@ -17,16 +17,16 @@ int subpack_height;
 int batpack_width = 200;
 
 boolean connected = false;
-boolean outletVoltageSet = false;
-int outletVoltageSetting;
+boolean chargeProfileSet = false;
+ChargeProfile chargeProfileSetting;
 int loops_since_message = 0;
 final int TIMEOUT_LOOPS = 50;
 Serial myPort;
 String[] ports = Serial.list();
 Button[] portButtons = new Button[10];
-Button[] powerOutletButtons = {
-  new Button(0, 0, 100, 50, "120", 255, 200, 0, 30),
-  new Button(0, 50, 100, 50, "208", 255, 200, 0, 30)
+Button[] chargeProfileButtons = {
+  new Button(0, 0, 100, 50, "ESDC", 255, 200, 0, 30),
+  new Button(0, 50, 100, 50, "Comp", 255, 200, 0, 30)
 };
 
 Subpack[] subpacks = new Subpack[num_subpacks];
@@ -56,12 +56,12 @@ void draw() {
     return;
   }
   
-  if (!outletVoltageSet) {
+  if (!chargeProfileSet) {
     draw_outlet_select();
     return;
   }
   else {
-    myPort.write(outletVoltageSetting);
+    myPort.write(chargeProfileSetting.getId());
   }
   
   background(0);
@@ -98,8 +98,8 @@ void draw_port_select(){
 
 void draw_outlet_select() {
   background(0);
-  for (int i = 0; i < powerOutletButtons.length; i++) {
-    powerOutletButtons[i].draw_button();
+  for (int i = 0; i < chargeProfileButtons.length; i++) {
+    chargeProfileButtons[i].draw_button();
   }
 }
   
@@ -119,19 +119,19 @@ void mousePressed(){
     }
   }
   
-  if (!outletVoltageSet) {
-    for (int i = 0; i < powerOutletButtons.length; i++) {
-      if (powerOutletButtons[i].mouse_over()) {
+  if (!chargeProfileSet) {
+    for (int i = 0; i < chargeProfileButtons.length; i++) {
+      if (chargeProfileButtons[i].mouse_over()) {
         switch (i) {
           case 0:
-            outletVoltageSetting = 120;
+            chargeProfileSetting = ChargeProfile.ESDC;
             break;
           case 1:
-            outletVoltageSetting = 208;
+            chargeProfileSetting = ChargeProfile.COMP;
             break;
         }
         
-        outletVoltageSet = true;
+        chargeProfileSet = true;
       }
     }
   }
