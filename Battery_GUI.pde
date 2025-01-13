@@ -61,7 +61,9 @@ void draw() {
     return;
   }
   else {
-    myPort.write(chargeProfileSetting.getId());
+    if (chargeProfileSetting == ChargeProfile.COMP) {
+      myPort.write(1);
+    }
   }
   
   background(0);
