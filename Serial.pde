@@ -12,7 +12,7 @@ int subpack_num = 0;
 final int expected_len_subpack = (num_cell_temps + num_board_temps + 2*num_voltages);
 //                                1byte/celltemp   1byte/boardtemp   2 bytes/cell voltage
 
-final int expected_len_batpack = 12;
+final int expected_len_batpack = 11;
 
 void byte_in(int b_in){
   
@@ -67,7 +67,7 @@ void parse_buffer_subpack(){
     
   int k = 0;
   for(int n = 0; n < num_voltages; n++){
-    subpacks[subpack_num].cellVoltages[n] = float((256*buffer[k])+buffer[k+1])/10000; //16 bit 10ths of millivolt --> float volts
+    subpacks[subpack_num].cellVoltages[n] = (float((256*buffer[k])+buffer[k+1])*0.00015)+1.5;
     k+=2;
   }
   
@@ -93,13 +93,13 @@ void parse_buffer_batpack(){
   
   int k = 0;
   
-  batpack.pack_voltage = float(256*buffer[k]+buffer[k+1])/100.0;
+  batpack.pack_voltage = (float(256*buffer[k]+buffer[k+1])*(0.00015*num_voltages*num_subpacks))+(1.5*num_voltages*num_subpacks);
   k+=2;
   
-  batpack.min_cell_voltage = float(256*buffer[k]+buffer[k+1])/10000.0;
+  batpack.min_cell_voltage = (float(256*buffer[k]+buffer[k+1])*0.00015)+1.5;
   k+=2;
   
-  batpack.max_cell_voltage = float(256*buffer[k]+buffer[k+1])/10000.0;
+  batpack.max_cell_voltage = (float(256*buffer[k]+buffer[k+1])*0.00015)+1.5;
   k+=2;
   
   batpack.max_temp = buffer[k];

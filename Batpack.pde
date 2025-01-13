@@ -1,17 +1,12 @@
 final int NO_ERROR = 0x0000;
 final int CHARGEMODE = 0x0001;
 final int PACK_TEMP_OVER = 0x0002;
-final int FUSE_BLOWN = 0x0004;
-final int PACK_TEMP_UNDER = 0x0008;
-final int LOW_SOC = 0x0010;
-final int CRITICAL_SOC = 0x0020;
-final int IMBALANCE = 0x0040;
-final int COM_FAILURE = 0x0080;
-final int SPI_FAULT = 0x0400;
-final int CELL_VOLT_OVER = 0x0800;
-final int CELL_VOLT_UNDER = 0x1000;
-final int CHARGE_HAULT = 0x2000;
-final int FULL = 0x4000;
+final int PACK_TEMP_UNDER = 0x0004;
+final int CELL_VOLT_OVER = 0x0008;
+final int CELL_VOLT_UNDER = 0x0010;
+final int OPEN_WIRE = 0x0020;
+final int MISMATCH = 0x0040;
+final int SPI_FAULT = 0x0080;
 
 final int padding = 20;
 final int line_space = 16; 
@@ -42,16 +37,14 @@ public class Batpack{
       //FAULTS
       fill(255, 0, 0);
       if((status & PACK_TEMP_OVER) != 0) print_text("Pack overtemp!");
-      if((status & FUSE_BLOWN)  != 0) print_text("Fuse blown!");
+      if((status & OPEN_WIRE)  != 0) print_text("Open wire!");
       if((status & PACK_TEMP_UNDER)  != 0) print_text("Pack undertemp!");
-      if((status & CRITICAL_SOC)  != 0) print_text("Critical SOC!");
       if((status & SPI_FAULT)  != 0) print_text("SPI Fault!");
       
       //WARNINGS
       fill(255, 255, 0);
-      if((status & LOW_SOC)  != 0) print_text("Low SOC!");
       if((status & CHARGEMODE) != 0) print_text("Charge mode");
-      if((status & IMBALANCE)  != 0) print_text("Imbalance!"); 
+      if((status & MISMATCH)  != 0) print_text("Mismatch!"); 
      
     }
   }

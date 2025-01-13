@@ -5,10 +5,10 @@ man i love formula
 import java.util.Arrays;
 import processing.serial.*;
 
-int num_subpacks = 10;
-int num_cell_temps = 12;
+int num_subpacks = 5;
+int num_cell_temps = 16;
 int num_board_temps = 0;
-int num_voltages = 12;
+int num_voltages = 24;
 
 int columns = 2; 
 int rows = 5;
