@@ -64,6 +64,9 @@ void draw() {
     if (chargeProfileSetting == ChargeProfile.COMP) {
       myPort.write(1);
     }
+    else if (chargeProfileSetting == ChargeProfile.ESDC) {
+      myPort.write(0);
+    }
   }
   
   background(0);
