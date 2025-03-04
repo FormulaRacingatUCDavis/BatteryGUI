@@ -11,7 +11,7 @@ int num_board_temps = 0;
 int num_voltages = 24;
 
 int columns = 2; 
-int rows = 5;
+int rows = 3;
 int subpack_width;
 int subpack_height;
 int batpack_width = 200;
