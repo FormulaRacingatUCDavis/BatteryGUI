@@ -1,12 +1,12 @@
-final int NO_ERROR = 0x0000;
-final int CHARGEMODE = 0x0001;
-final int PACK_TEMP_OVER = 0x0002;
-final int PACK_TEMP_UNDER = 0x0004;
-final int CELL_VOLT_OVER = 0x0008;
-final int CELL_VOLT_UNDER = 0x0010;
-final int OPEN_WIRE = 0x0020;
-final int MISMATCH = 0x0040;
-final int SPI_FAULT = 0x0080;
+final int NO_ERROR = 0x00;
+final int CHARGEMODE = 0x01;
+final int PACK_TEMP_OVER = 0x02;
+final int PACK_TEMP_UNDER = 0x04;
+final int CELL_VOLT_OVER = 0x08;
+final int CELL_VOLT_UNDER = 0x10;
+final int OPEN_WIRE = 0x20;
+final int MISMATCH = 0x40;
+final int SPI_FAULT = 0x80;
 
 final int padding = 20;
 final int line_space = 16; 

@@ -114,8 +114,8 @@ void parse_buffer_batpack(){
   batpack.SOC = buffer[k]; 
   k++;
   
-  batpack.status = (256*buffer[k])+buffer[k+1];
-  k+=2;    
+  batpack.status = buffer[k];
+  k++;
   
 }
 
