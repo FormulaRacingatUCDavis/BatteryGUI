@@ -44,7 +44,7 @@ public class Batpack{
       //WARNINGS
       fill(255, 255, 0);
       if((status & CHARGEMODE) != 0) print_text("Charge mode");
-      if((status & MISMATCH)  != 0) print_text("Mismatch!"); 
+      if((status & MISMATCH)  != 0) print_text("Mismatch"); 
      
     }
   }
